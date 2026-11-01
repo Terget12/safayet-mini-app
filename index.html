@@ -24,23 +24,63 @@ nav{position:fixed;z-index:5;bottom:0;left:0;right:0;background:rgba(11,18,32,.9
 <main>
 <section class="page active" id="home">
 <div class="welcome"><h2>স্বাগতম 👋</h2><p>এক জায়গা থেকে নম্বর কিনুন, সক্রিয় নম্বর দেখুন এবং OTP-এর অবস্থা পরীক্ষা করুন।</p></div>
-<div class="stats"><div class="stat"><span>সক্রিয় নম্বর</span><strong id="activeCount">০</strong></div><div class="stat"><span>আজকের অর্ডার</span><strong id="orderCount">০</strong></div><div class="stat"><span>অ্যাকাউন্ট</span><strong id="accountState">Demo</strong></div></div>
+<div class="notice" id="connectionNotice"></div><div class="stats"><div class="stat"><span>সক্রিয় নম্বর</span><strong id="activeCount">০</strong></div><div class="stat"><span>আজকের অর্ডার</span><strong id="orderCount">০</strong></div><div class="stat"><span>অ্যাকাউন্ট</span><strong id="accountState">Demo</strong></div></div>
 <div class="section-title"><h3>নম্বর কিনুন</h3><span>নতুন অর্ডার</span></div>
 <div class="card"><div class="field"><label for="provider">সার্ভিস প্রোভাইডার</label><select id="provider"><option value="smsbower">SMSBower</option><option value="localusa">Local USA API</option></select></div>
 <div class="row"><div class="field"><label for="country">দেশ</label><select id="country"><option value="us">🇺🇸 USA</option><option value="gb">🇬🇧 United Kingdom</option><option value="ca">🇨🇦 Canada</option><option value="in">🇮🇳 India</option><option value="bd">🇧🇩 Bangladesh</option></select></div>
 <div class="field"><label for="service">সার্ভিস</label><select id="service"><option value="telegram">Telegram</option><option value="whatsapp">WhatsApp</option><option value="google">Google</option><option value="other">Other / অন্য</option></select></div></div>
 <div class="field"><label for="quantity">পরিমাণ</label><select id="quantity"><option value="1">১টি নম্বর</option><option value="2">২টি নম্বর</option><option value="3">৩টি নম্বর</option></select></div>
-<button class="primary" id="buyBtn">নম্বরের দাম / কিনুন</button><div class="notice warn show" id="buyNotice">ডেমো ইন্টারফেস: ব্যাকএন্ড API যুক্ত না হওয়া পর্যন্ত এখানে বাস্তবে নম্বর কেনা হবে না।</div></div>
+<div class="notice" id="catalogNote"></div><button class="primary" id="buyBtn">নম্বরের দাম / কিনুন</button><div class="notice warn show" id="buyNotice">ডেমো ইন্টারফেস: ব্যাকএন্ড API যুক্ত না হওয়া পর্যন্ত এখানে বাস্তবে নম্বর কেনা হবে না।</div></div>
 <div class="section-title"><h3>আপনার নম্বর</h3><span id="numberSummary">০টি নম্বর</span></div><div class="card" id="numberList"><div class="empty">এখনো কোনো নম্বর API থেকে লোড হয়নি।</div></div>
 </section>
 <section class="page" id="numbers"><div class="section-title"><h3>সক্রিয় নম্বর</h3><span>Active numbers</span></div><div class="card"><div class="empty">ব্যাকএন্ড সংযুক্ত হলে সক্রিয় নম্বর ও OTP এখানে দেখা যাবে।</div><button class="secondary" style="width:100%" id="refreshBtn">↻ রিফ্রেশ</button><div class="notice" id="refreshNotice"></div></div></section>
-<section class="page" id="history"><div class="section-title"><h3>অর্ডার হিস্ট্রি</h3><span>Order history</span></div><div class="card"><div class="empty">এখনো কোনো অর্ডার হিস্ট্রি লোড হয়নি।</div></div></section>
+<section class="page" id="history"><div class="section-title"><h3>অর্ডার হিস্ট্রি</h3><span>Order history</span></div><div class="card" id="historyList"><div class="empty">অর্ডার লোড হচ্ছে…</div></div></section>
 <section class="page" id="profile"><div class="section-title"><h3>প্রোফাইল</h3><span>Account</span></div><div class="card"><div class="number-item"><div class="number-icon">👤</div><div class="number-info"><strong id="tgName">Telegram ব্যবহারকারী</strong><small id="tgId">Telegram WebApp data পাওয়া যায়নি</small></div></div><div class="number-item"><div class="number-icon">🔐</div><div class="number-info"><strong>নিরাপদ API সংযোগ</strong><small>API key HTML ফাইলে রাখা যাবে না।</small></div></div><p style="font-size:12px;color:var(--muted);line-height:1.6">অ্যাডমিন API key এবং পেমেন্ট/অর্ডারের কাজ সার্ভার-সাইডে করতে হবে। এই HTML ফাইলটি শুধু Mini App-এর ফ্রন্টএন্ড।</p></div></section>
 </main><footer>Safayet SMS • Mini App interface</footer></div>
 <nav><div class="nav-inner"><button class="nav-btn active" data-page="home"><span>⌂</span>হোম</button><button class="nav-btn" data-page="numbers"><span>▣</span>নম্বর</button><button class="nav-btn" data-page="history"><span>◷</span>হিস্ট্রি</button><button class="nav-btn" data-page="profile"><span>♙</span>প্রোফাইল</button></div></nav>
 <script>
-(function(){const tg=window.Telegram&&window.Telegram.WebApp;if(tg){tg.ready();tg.expand();try{tg.setHeaderColor('#0b1220');tg.setBackgroundColor('#0b1220')}catch(e){}const u=tg.initDataUnsafe&&tg.initDataUnsafe.user;if(u){document.getElementById('tgName').textContent=[u.first_name,u.last_name].filter(Boolean).join(' ')||'Telegram ব্যবহারকারী';document.getElementById('tgId').textContent='Telegram ID: '+u.id;document.getElementById('accountState').textContent='Ready'}}
-document.querySelectorAll('.nav-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.nav-btn').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===b.dataset.page));if(tg&&tg.HapticFeedback)tg.HapticFeedback.selectionChanged()}));
-document.getElementById('buyBtn').addEventListener('click',()=>{const provider=document.getElementById('provider').value;const country=document.getElementById('country').selectedOptions[0].textContent;const service=document.getElementById('service').selectedOptions[0].textContent;const qty=document.getElementById('quantity').value;const box=document.getElementById('buyNotice');box.textContent=`নির্বাচন: ${provider==='smsbower'?'SMSBower':'Local USA API'} • ${country} • ${service} • ${qty}টি। বাস্তব অর্ডারের জন্য নিরাপদ backend API সংযুক্ত করতে হবে।`;box.classList.add('show','warn');if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('warning')});
-document.getElementById('refreshBtn').addEventListener('click',()=>{const b=document.getElementById('refreshNotice');b.textContent='এখনো backend API সংযুক্ত হয়নি, তাই নম্বর/OTP রিফ্রেশ করা যাচ্ছে না।';b.classList.add('show')});})();
+// API server hosted on Zero-Bot. Do not put provider/payment API keys in this file.
+const API_BASE = "https://safayet05-white.w5h.zero-bot.org";
+(function(){
+  const tg = window.Telegram && window.Telegram.WebApp;
+  const $ = id => document.getElementById(id);
+  const bn = n => new Intl.NumberFormat('bn-BD').format(n || 0);
+  const show = (id, msg, warn=false) => { const el=$(id); el.textContent=msg; el.classList.add('show'); if(warn) el.classList.add('warn'); else el.classList.remove('warn'); };
+  const initData = tg ? tg.initData : '';
+  if (tg) {
+    tg.ready(); tg.expand();
+    try { tg.setHeaderColor('#0b1220'); tg.setBackgroundColor('#0b1220'); } catch(e) {}
+    const u = tg.initDataUnsafe && tg.initDataUnsafe.user;
+    if (u) { $('tgName').textContent=[u.first_name,u.last_name].filter(Boolean).join(' ')||'Telegram ব্যবহারকারী'; $('tgId').textContent='Telegram ID: '+u.id; }
+  }
+  async function api(path) {
+    if (!initData) throw new Error('Mini App Telegram-এর ভেতর থেকে খুলুন; সরাসরি ব্রাউজারে API লগইন হবে না।');
+    const res = await fetch(API_BASE + path, {headers:{'X-Telegram-Init-Data':initData}, cache:'no-store'});
+    const body = await res.json().catch(()=>({}));
+    if (!res.ok) throw new Error(body.message || body.error || (await Promise.resolve('API error: '+res.status)));
+    return body;
+  }
+  function renderOrders(items) {
+    const active = items.filter(x => !['completed','cancelled','canceled','expired','refunded'].includes(String(x.status||'').toLowerCase()));
+    $('activeCount').textContent=bn(active.length); $('orderCount').textContent=bn(items.length); $('numberSummary').textContent=bn(active.length)+'টি নম্বর';
+    const html = active.length ? active.map(x=>`<div class="number-item"><div class="number-icon">📱</div><div class="number-info"><strong>${escapeHtml(x.phone||'নম্বর')}</strong><small>${escapeHtml(x.service||'')} • ${escapeHtml(x.country||'')} • ${escapeHtml(x.status||'')}</small>${x.otp?`<small>OTP: ${escapeHtml(x.otp)}</small>`:''}</div></div>`).join('') : '<div class="empty">কোনো সক্রিয় নম্বর পাওয়া যায়নি।</div>';
+    $('numberList').innerHTML=html;
+    $('historyList').innerHTML = items.length ? items.map(x=>`<div class="number-item"><div class="number-icon">🧾</div><div class="number-info"><strong>${escapeHtml(x.phone||'অর্ডার')} • ${escapeHtml(x.status||'')}</strong><small>${escapeHtml(x.service||'')} • ${escapeHtml(x.country||'')} • ৳${escapeHtml(x.amount||0)}</small></div></div>`).join('') : '<div class="empty">এখনো কোনো অর্ডার নেই।</div>';
+  }
+  function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  async function loadAll(){
+    try {
+      const [me, catalog, orders] = await Promise.all([api('/api/me'),api('/api/catalog'),api('/api/orders')]);
+      $('balance').textContent='৳ '+Number(me.user.balance||0).toFixed(2);
+      $('accountState').textContent='Connected';
+      if (catalog.ok) $('catalogNote').textContent=bn(catalog.items.length)+'টি সার্ভিস ক্যাটালগ থেকে পাওয়া গেছে।';
+      renderOrders(orders.items||[]);
+      show('connectionNotice','Backend API সংযুক্ত হয়েছে। কেনাকাটা/পেমেন্ট এখনো Mini App-এ চালু নয়।');
+    } catch(e) { $('accountState').textContent='Offline'; show('connectionNotice','API সংযোগ হয়নি: '+e.message,true); }
+  }
+  document.querySelectorAll('.nav-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.nav-btn').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===b.dataset.page));if(tg&&tg.HapticFeedback)tg.HapticFeedback.selectionChanged()}));
+  $('buyBtn').addEventListener('click',()=>show('buyNotice','Mini App থেকে বাস্তব নম্বর কেনা এখনো সক্রিয় নয়। আপাতত Telegram বট থেকেই কিনুন।',true));
+  $('refreshBtn').addEventListener('click',async()=>{try{const r=await api('/api/orders');renderOrders(r.items||[]);show('refreshNotice','নম্বরের তালিকা আপডেট হয়েছে।')}catch(e){show('refreshNotice',e.message,true)}});
+  loadAll();
+})();
 </script></body></html>
